@@ -1,48 +1,35 @@
 import { View, Text, StatusBar, Image, SafeAreaView, TextInput, TouchableOpacity, FlatList } from 'react-native'
-import React,{useCallback} from 'react'
+import React, { useCallback } from 'react'
 import { dimensions } from '../constants/dimensions';
 import { BellIcon, MagnifyingGlassIcon, MapPinIcon } from 'react-native-heroicons/solid';
 import { themeColors } from '../theme';
-import { categories } from '../constants';
-import CategoriesItem, { Props } from '../components/CategoriesItem';
-
-
-//  const CategoriesItem = (item: Props) => {
-//   const [activeCategory, setActiveCategory] = React.useState<number>(1);
-//   const setCategory = (id: string) => {
-    
-//   }
-//   return (
-//     <TouchableOpacity
-//       onPress={()=>setCategory(item.id)}
-//       className='p-4 px-5 rounded-full mr-2 shadow'
-//       style={{ backgroundColor: 'rgba(0,0,0,0.07)' }}>
-//       <Text
-//         className='font-semibold'
-//       >{item.title}</Text>
-//     </TouchableOpacity>
-//   )
-// }
-
+import { categories, coffeeItems } from '../constants';
+import CategoriesItem from '../components/CategoriesItem';
+import Carousel from 'react-native-snap-carousel-v4';
+import CoffeeCard from '../components/CoffeeCard';
 
 const HomeScreen = () => {
   const [activeCategory, setActiveCategory] = React.useState<number>(1);
-  const setCategory = useCallback( (id: number) => {
+  const [activeCoffeeItem, setActiveCoffeeItem] = React.useState<number>(1);
+
+  const setCategory = useCallback((id: number) => {
+    console.log('setting category');
     setActiveCategory(id);
-  },[])
+  }, []);
+
   return (
     <View className='flex-1 relative bg-white'>
-      <StatusBar />
+      <StatusBar barStyle='dark-content' />
       <Image source={require('../assets/images/beansBackground1.png')}
         className='w-full absolute -top-5 opacity-10'
         style={{ height: dimensions.height220 }}
       />
       <SafeAreaView className='flex-1'>
-        <View className='px-4 flex-row justify-between items-center'>
+        <View className='mt-2 px-4 flex-row justify-between items-center'>
           <Image source={require('../assets/images/avatar.png')} className='w-9 h-9 rounded-full' />
           <View className='flex-row items-center space-x-2'>
             <MapPinIcon size="25" color={themeColors.bgLight} />
-            <Text className='text-base font-semibold'>Vinh, NYC</Text>
+            <Text className='text-base font-semibold'>Vinh, NYC {activeCoffeeItem}</Text>
           </View>
           <BellIcon size="27" color="black" />
         </View>
@@ -52,7 +39,7 @@ const HomeScreen = () => {
         <View className='mx-5 mt-14'>
           <View className='flex-row justify-center items-center rounded-full p-1 bg-[#e6e6e6]'>
             <TextInput placeholder='Search' className='p-4 flex-1 font-semibold text-gray-700' />
-            <TouchableOpacity className='rounded-full p-2'
+            <TouchableOpacity onPress={() => setActiveCoffeeItem(2)} className='rounded-full p-2'
               style={{ backgroundColor: themeColors.bgLight }}
             >
               <MagnifyingGlassIcon size="25" strokeWidth={2} color="white" />
@@ -67,11 +54,29 @@ const HomeScreen = () => {
             horizontal
             showsHorizontalScrollIndicator={false}
             data={categories}
-            keyExtractor={(item:any) => item.id}
+            keyExtractor={(item) => item.id.toString()}
             className='overflow-visible'
-            renderItem={({ item }) => <CategoriesItem id={item.id} title={item.title} activeCategory={activeCategory} setCategory={setCategory} />}
+            renderItem={({ item }) => <CategoriesItem item={item} activeCategory={activeCategory} setCategory={setCategory} />}
 
           />
+        </View>
+
+        {/* coffee card */}
+
+        <View className='mt-16 py-2'>
+          <Carousel
+            containerCustomStyle={{ overflow: 'visible' }}
+            data={coffeeItems}
+            renderItem={({ item }: any) => <CoffeeCard item={item} />}
+            firstItem={1}
+            inactiveSlideOpacity={0.75}
+            inactiveSlideScale={0.85}
+            loop={true}
+            sliderWidth={400}
+            itemWidth={260}
+            slideStyle={{ display: 'flex', alignItems: 'center' }}
+          >
+          </Carousel>
         </View>
       </SafeAreaView>
     </View>

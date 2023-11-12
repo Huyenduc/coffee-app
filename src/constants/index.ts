@@ -2,7 +2,9 @@
 // don't worry, you can find this data in the git repo 
 // you can find the git repo link in the description ;)
 
-export const categories: any = [
+import { ICoffeeCard } from "../components/CoffeeCard"
+
+export const categories = [
   {
     id: 1,
     title: "Cappuccino",
@@ -25,7 +27,7 @@ export const categories: any = [
   },
 ]
 
-export const coffeeItems = [
+export const coffeeItems : ICoffeeCard[] = [
   {
     id: 1,
     name: 'Black Coffee',

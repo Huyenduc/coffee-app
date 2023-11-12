@@ -1,9 +1,9 @@
-import HomeScreen from './src/screens/homeScreen';
+import AppNavigation from './src/router/appNavigation';
 
 export default function App() {
   return (
     <>
-      <HomeScreen />
+      <AppNavigation />
     </>
   );
 }

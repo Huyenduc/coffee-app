@@ -1,31 +1,31 @@
-import { View, Text, StatusBar, Image, SafeAreaView, TextInput, TouchableOpacity, FlatList } from 'react-native'
-import React from 'react'
-import { dimensions } from '../constants/dimensions';
-import { BellIcon, MagnifyingGlassIcon, MapPinIcon } from 'react-native-heroicons/solid';
+import { Text, TouchableOpacity } from 'react-native'
+import React, { FC, memo } from 'react'
 import { themeColors } from '../theme';
-import { categories } from '../constants';
 
-export interface Props {
-  id: number,
-  title: string,
+export interface IProps {
+  item: { id: number, title: string }
   activeCategory: number,
   setCategory: (id: number) => void
 }
 
- const CategoriesItem = (item:Props) => {
- const {id, title, activeCategory , setCategory} = item;
-  console.log(activeCategory);
- 
+const CategoriesItem: FC<IProps> = ({ item, activeCategory, setCategory }) => {
+  const {
+    id,
+    title
+  } = item;
+  console.log('rendering categories item');
+  const isActiveCategory = activeCategory === id;
+
   return (
     <TouchableOpacity
-      onPress={()=>setCategory(id)}
-      className='p-4 px-5 rounded-full mr-2 shadow'
-      style={{ backgroundColor:activeCategory === id ? themeColors.bgLight : 'rgba(0,0,0,0.07)' }}>
+      onPress={() => setCategory(id)}
+      className='p-4 px-5 rounded-full mr-2 shadow min-w-0'
+      style={{ backgroundColor: isActiveCategory ? themeColors.bgLight : 'rgba(0,0,0,0.07)' }}>
       <Text
-        className='font-semibold'
+        className={'font-semibold ' + (isActiveCategory ? 'text-white' : 'text-gray-700')}
       >{title}</Text>
     </TouchableOpacity>
   )
 }
 
-export default CategoriesItem;
+export default memo(CategoriesItem);
